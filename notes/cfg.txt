@@ -1,0 +1,15 @@
+Prog    ::=     Dcls Stmts $
+Dcls    ::=     Dcl Dcls
+        |       λ
+Dcl     ::=     floatdcl id
+        |       intdcl id
+Stmts   ::=     Stmt Stmts
+        |       λ
+Stmt    ::=     id assign Val Expr
+        |       print id
+Expr    ::=     plus Val Expr
+        |       minus Val Expr
+        |       λ
+Val     ::=     id
+        |       inum
+        |       fnum
