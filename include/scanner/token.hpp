@@ -1,6 +1,5 @@
 #ifndef AC_TOKEN
 #define AC_TOKEN
-#include "magic_enum/magic_enum.hpp"
 #include <string>
 #include <iostream>
 
@@ -27,7 +26,8 @@ struct Token {
 };
 
 inline std::ostream& operator <<(std::ostream& out, const Token& t) {
-    return out << "Token: type=" <<magic_enum::enum_name(t.type) << ", semantic value="<< t.semantic_value;
+    auto type = "garbage";
+    return out << "Token: type=" << type << ", semantic value="<< t.semantic_value;
 }
 }   
 #endif
