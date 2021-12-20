@@ -1,9 +1,9 @@
 #ifndef AC_SCANNER
 #define AC_SCANNER
+#include "token.hpp"
 #include <vector>
 #include <string>
-#include <exception>
-#include "token.hpp"
+#include <stdexcept>
 namespace AC {
 class Scanner {
 private:
@@ -11,14 +11,13 @@ private:
     std::vector<Token> tokens{};
     const std::string nums = "0123456789";
     const std::string letters = "abcdeghjklmnoqrstuvwxyz";
-public:
     std::string prog;
-
 
 private:
     bool is_num(char n);
     bool is_var(char n);
     char peek();
+    char read();
     void advance();
     Token scan();
     Token scan_digit();

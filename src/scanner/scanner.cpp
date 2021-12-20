@@ -1,13 +1,17 @@
 #include "scanner/scanner.hpp"
-char AC::Scanner::peek() {
+inline char AC::Scanner::peek() {
     return cur_pos+1>prog.length() ? 0 : prog[cur_pos+1];
+}
+
+inline char AC::Scanner::read() {
+    return prog[cur_pos];
 }
 
 void AC::Scanner::set_program(const std::string& s) {
     prog = s;
 }
 
-void AC::Scanner::advance() {
+inline void AC::Scanner::advance() {
     cur_pos++;
 }
 
@@ -20,53 +24,66 @@ bool AC::Scanner::is_var(char n) {
 }
 
 AC::Token AC::Scanner::scan() {
-    while (prog[cur_pos] == ' ')
+    Token t{};
+    while (read() == ' ')
         advance();
-    auto c = prog[cur_pos];
-    advance();
-    if (c == 0)
-        return Token(TokenType::eof, "");
-    else if (is_num(peek()))
-        return scan_digit();
-    else if (is_var(c))
-        return Token(TokenType::id, std::string(&c));
+    const auto current = read();
+    const auto next = peek();
+    if (next == 0) 
+        t.type = TokenType::eof;
+    else if (is_num(current))
+        t = scan_digit();
+    else if (is_var(current)) {
+        t.type = TokenType::id;
+        t.semantic_value = std::string(&current);
+    }
     else {
-        switch (c) {
+        switch (current) {
             case 'f':
-                return Token(TokenType::floatdcl, "");
+                t.type = TokenType::floatdcl;
+                break;
             case 'i':
-                return Token(TokenType::intdcl, "");
+                t.type =TokenType::intdcl;
+                break;
             case 'p':
-                return Token(TokenType::print, "");
+                t.type = TokenType::print;
+                break;
             case '+':
-                return Token(TokenType::plus, "");
+                t.type = TokenType::plus;
+                break;
             case '-':
-                return Token(TokenType::minus, "");
+                t.type = TokenType::minus;
+                break;
             case '=':
-                return Token(TokenType::assign, "");
+                t.type = TokenType::assign;
+                break;
             default:
-                return Token(TokenType::eof,"");
+                std::string err = "Error: unknown character " + current;
+                throw std::runtime_error(err);
         }
     }
+    advance();
+    return t;
 }
 
 AC::Token AC::Scanner::scan_digit() {
-    std::string val = "";
-    while (is_num(peek())) {
-        val += prog[cur_pos];
+    Token t{};
+    while (is_num(read())) {
+        t.semantic_value += read();
         advance();
     }
-    if (peek() != '.') 
-        return Token(TokenType::intdcl,val);
+    if (read() != '.') 
+        t.type = TokenType::intdcl;
     else {
+        t.semantic_value += read();
         advance();
-        val += prog[cur_pos];
-        while (is_num(peek())) {
-            val += prog[cur_pos];
+        while (is_num(read())) {
+            t.semantic_value += read();
             advance();
         }
-        return Token(TokenType::floatdcl, val);
+        t.type = TokenType::floatdcl;
     }
+    return t;
 }
 
 std::vector<AC::Token> AC::Scanner::get_tokens() {

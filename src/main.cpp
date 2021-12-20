@@ -18,12 +18,18 @@ int main(int argc, char** argv) {
     std::stringstream p;
     p << file.rdbuf();
     file.close();
+    std::cout << p.str() << std::endl;
 
     AC::Scanner s{};
     s.set_program(p.str());
-    std::cout << s.prog << std::endl;
+    try {
     auto tokens = s.get_tokens();
     for (auto t : tokens)
         std::cout << t << std::endl;
+    }
+    catch (std::runtime_error& e) {
+        std::cout << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
     return EXIT_SUCCESS;
 }
