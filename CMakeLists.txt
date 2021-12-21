@@ -15,10 +15,13 @@ target_include_directories(scanner PUBLIC include)
 add_executable(ac src/main.cpp)
 target_link_libraries(ac PRIVATE scanner)
 
+add_library(Catch2 INTERFACE)
+target_include_directories(Catch2 INTERFACE external)
+
 add_executable(ac-tests 
-    include/catch2/catch.hpp
     src/scanner/scanner.test.cpp
     src/main.test.cpp
 )
+target_link_libraries(ac-tests PRIVATE Catch2)
 target_link_libraries(ac-tests PRIVATE scanner)
 

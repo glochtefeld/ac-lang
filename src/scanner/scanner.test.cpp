@@ -1,4 +1,4 @@
-#include "catch2/catch.hpp"
+#include "../external/catch2/catch.hpp"
 #include "scanner/scanner.hpp"
 
 SCENARIO ( "The scanner reads tokens appropriately", "[scanner]" ) {
