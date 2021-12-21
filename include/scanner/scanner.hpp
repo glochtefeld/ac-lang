@@ -16,14 +16,14 @@ private:
 private:
     bool is_num(char n);
     bool is_var(char n);
-    char peek();
+    bool at_eof();
     char read();
     void advance();
     Token scan();
     Token scan_digit();
 
 public:
-    std::vector<Token> get_tokens();
+    auto get_tokens() -> const std::vector<Token>&;
     void set_program(const std::string& s);
 
 };

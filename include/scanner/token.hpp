@@ -18,6 +18,33 @@ enum class TokenType {
     eof
 };
 
+inline std::string type_print(TokenType t) {
+    switch (t) {
+    case TokenType::floatdcl:
+        return "floatdcl";
+    case TokenType::intdcl:
+        return "intdcl";
+    case TokenType::print:
+        return "print";
+    case TokenType::id:
+        return "id";
+    case TokenType::assign:
+        return "assign";
+    case TokenType::plus:
+        return "plus";
+    case TokenType::minus:
+        return "minus";
+    case TokenType::inum:
+        return "inum";
+    case TokenType::fnum:
+        return "fnum";
+    case TokenType::blank:
+        return "blank";
+    case TokenType::eof:
+        return "eof";
+    }
+}
+
 struct Token {
     TokenType type;
     std::string semantic_value;
@@ -26,8 +53,7 @@ struct Token {
 };
 
 inline std::ostream& operator <<(std::ostream& out, const Token& t) {
-    auto type = "garbage";
-    return out << "Token: type=" << type << ", semantic value="<< t.semantic_value;
+    return out << "Token: type=" << type_print(t.type) << ", semantic value="<< t.semantic_value;
 }
 }   
 #endif
