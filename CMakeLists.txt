@@ -36,4 +36,3 @@ add_executable(ac-tests
 target_link_libraries(ac-tests PRIVATE Catch2)
 target_link_libraries(ac-tests PRIVATE scanner)
 target_link_libraries(ac-tests PRIVATE parser)
-

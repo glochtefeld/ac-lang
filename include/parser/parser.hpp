@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <algorithm>
 #include <iostream> // Remove after tests are written, this is for helpful debuggery
+#include <spdlog/spdlog.h>
 #include "scanner/token.hpp"
 #include "ast/tree.hpp"
 

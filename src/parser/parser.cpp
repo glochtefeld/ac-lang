@@ -147,7 +147,7 @@ bool Parser::check_program() {
         prog();
         return true;
     } catch (std::runtime_error& e) {
-        std::cout << e.what() << std::endl;
+        spdlog::error(std::string(e.what()),1);
         return false;
     }
 }
