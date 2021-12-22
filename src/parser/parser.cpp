@@ -27,8 +27,10 @@ void Parser::throw_err(const std::string& s) {
 void Parser::expect(const std::string& s, TokenType t) {
     if (!match(read(),t)) {
         std::string e = "ERR: expected " + s + ". Found " + type_print(read().type);
-        throw_err(e);
+        throw_err(e.c_str());
     }
+    if (!match(read(),TokenType::eof))
+        advance();
 }
 
 void Parser::prog() {
@@ -56,8 +58,10 @@ void Parser::dcls() {
         dcl();
         dcls();
     }
-    else { // see #prog_check
-        expect("{$,float,int}",TokenType::eof);
+    else { 
+        matches = {TokenType::id, TokenType::print, TokenType::eof};
+        if (!multi_match(read(),matches)) 
+            throw_err("Expected lambda to resolve as Stmts");
     }
 }
 void Parser::dcl() {
@@ -71,6 +75,64 @@ void Parser::dcl() {
     }
 }
 
+void Parser::stmts() {
+    std::vector<TokenType> matches {
+        TokenType::id,
+        TokenType::print};
+    if (multi_match(read(),matches)) {
+            stmt();
+            stmts();
+    }
+    else {
+        expect("{$}",TokenType::eof);
+    }
+}
+void Parser::stmt() {
+    if (match(read(),TokenType::id)) {
+        advance();
+        expect("{assign}",TokenType::assign);
+        val();
+        expr();
+    }
+    else if (match(read(),TokenType::print)) {
+        advance();
+        expect("{id}",TokenType::id);
+    }
+}
+void Parser::expr() {
+    std::vector<TokenType> matches {
+        TokenType::plus,
+        TokenType::minus};
+    if (match(read(),TokenType::plus)) {
+        advance();
+        val();
+        expr();
+    }
+    else if (match(read(),TokenType::minus)) {
+        advance();
+        val();
+        expr();
+    }
+    else {
+        matches = {TokenType::id, TokenType::print, TokenType::eof};
+        if (!multi_match(read(),matches))
+            throw_err("Expected {id, print}");
+    }
+}
+void Parser::val() {
+    if (match(read(),TokenType::id)) {
+        advance();
+    }
+    else if (match(read(),TokenType::inum)) {
+        advance();
+    }
+    else if (match(read(),TokenType::fnum)) {
+        advance();
+    }
+    else {
+        throw_err("Val expected {id,inum,fnum}.");
+    }
+}
 
 void Parser::set_tokens(const std::vector<Token>& t) {
     tokens = t;
@@ -83,15 +145,7 @@ bool Parser::check_program() {
         prog();
         return true;
     } catch (std::runtime_error& e) {
-        std::cout << e.what() << std::endl;
+        // std::cout << e.what() << std::endl; log this 
         return false;
     }
 }
-    
-
-/* Comments
- * #prog_check: In the book, the pseudocode checks for an EOF and does nothing,
- * and then failing that errors out. This is a minor restructure which errors after
- * not reading an EOF.
- *
- */

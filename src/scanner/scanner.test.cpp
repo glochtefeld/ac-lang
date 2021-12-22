@@ -18,7 +18,7 @@ SCENARIO ( "The scanner reads tokens appropriately", "[scanner]" ) {
             THEN ("The token is still parsed") {
                 auto tokens = s.get_tokens();
                 REQUIRE ( tokens.size() == 2 );
-                REQUIRE ( tokens[0].type == AC::TokenType::intdcl );
+                REQUIRE ( tokens[0].type == AC::TokenType::inum );
             }
             s.set_program("              a                =                    15.0");
             THEN ("There are four tokens: id, assign, floatdcl, and EOF") {
@@ -26,7 +26,7 @@ SCENARIO ( "The scanner reads tokens appropriately", "[scanner]" ) {
                 REQUIRE ( tokens.size() == 4 );
                 REQUIRE ( tokens[0].type == AC::TokenType::id );
                 REQUIRE ( tokens[1].type == AC::TokenType::assign );
-                REQUIRE ( tokens[2].type == AC::TokenType::floatdcl );
+                REQUIRE ( tokens[2].type == AC::TokenType::fnum );
             }
         }
         WHEN ( "the program has invalid tokens" ) {
@@ -42,7 +42,7 @@ SCENARIO ( "The scanner reads tokens appropriately", "[scanner]" ) {
                 REQUIRE ( tokens.size() == 4 );
                 REQUIRE ( tokens[0].type == AC::TokenType::id );
                 REQUIRE ( tokens[1].type == AC::TokenType::assign );
-                REQUIRE ( tokens[2].type == AC::TokenType::intdcl );
+                REQUIRE ( tokens[2].type == AC::TokenType::inum );
             }
         }
         WHEN ( "ints and floats are in the same program" ) {
@@ -50,9 +50,9 @@ SCENARIO ( "The scanner reads tokens appropriately", "[scanner]" ) {
             THEN ("the tokens are separated and the value is stored") {
                 auto tokens = s.get_tokens();
                 REQUIRE ( tokens.size() == 3 );
-                REQUIRE ( tokens[0].type == AC::TokenType::intdcl );
+                REQUIRE ( tokens[0].type == AC::TokenType::inum );
                 REQUIRE ( tokens[0].semantic_value == "15" );
-                REQUIRE ( tokens[1].type == AC::TokenType::floatdcl );
+                REQUIRE ( tokens[1].type == AC::TokenType::fnum );
                 REQUIRE ( tokens[1].semantic_value == "33.093" );
             }
         }
