@@ -5,10 +5,6 @@ inline auto Parser::read()->Token {
     return tokens[pos];
 }
 
-inline auto Parser::peek()->Token {
-    return tokens[pos+1];
-}
-
 inline bool Parser::match(const Token& tok, TokenType type) {
     return tok.type == type;
 }
@@ -25,11 +21,12 @@ void Parser::throw_err(const std::string& s) {
 }
 
 void Parser::expect(const std::string& s, TokenType t) {
-    if (!match(read(),t)) {
-        std::string e = "ERR: expected " + s + ". Found " + type_print(read().type);
+    auto tok = read();
+    if (!match(tok,t)) {
+        std::string e = "ERR: expected " + s + ". Found " + type_print(tok.type);
         throw_err(e.c_str());
     }
-    if (!match(read(),TokenType::eof))
+    if (!match(tok,TokenType::eof))
         advance();
 }
 
@@ -51,25 +48,27 @@ void Parser::prog() {
 }
 
 void Parser::dcls() {
+    auto t = read();
     std::vector<TokenType> matches {
         TokenType::floatdcl,
         TokenType::intdcl};
-    if (multi_match(read(),matches)) {
+    if (multi_match(t,matches)) {
         dcl();
         dcls();
     }
     else { 
         matches = {TokenType::id, TokenType::print, TokenType::eof};
-        if (!multi_match(read(),matches)) 
+        if (!multi_match(t,matches)) 
             throw_err("Expected lambda to resolve as Stmts");
     }
 }
 void Parser::dcl() {
-    if (match(read(),TokenType::floatdcl)) {
+    auto t = read();
+    if (match(t,TokenType::floatdcl)) {
         advance();
         expect("{id}",TokenType::id);
     }
-    else if (match(read(),TokenType::intdcl)) {
+    else if (match(t,TokenType::intdcl)) {
         advance();
         expect("{id}",TokenType::id);
     }
@@ -88,45 +87,48 @@ void Parser::stmts() {
     }
 }
 void Parser::stmt() {
-    if (match(read(),TokenType::id)) {
+    auto t = read();
+    if (match(t,TokenType::id)) {
         advance();
         expect("{assign}",TokenType::assign);
         val();
         expr();
     }
-    else if (match(read(),TokenType::print)) {
+    else if (match(t,TokenType::print)) {
         advance();
         expect("{id}",TokenType::id);
     }
 }
 void Parser::expr() {
+    auto t = read();
     std::vector<TokenType> matches {
         TokenType::plus,
         TokenType::minus};
-    if (match(read(),TokenType::plus)) {
+    if (match(t,TokenType::plus)) {
         advance();
         val();
         expr();
     }
-    else if (match(read(),TokenType::minus)) {
+    else if (match(t,TokenType::minus)) {
         advance();
         val();
         expr();
     }
     else {
         matches = {TokenType::id, TokenType::print, TokenType::eof};
-        if (!multi_match(read(),matches))
+        if (!multi_match(t,matches))
             throw_err("Expected {id, print}");
     }
 }
 void Parser::val() {
-    if (match(read(),TokenType::id)) {
+    auto t = read();
+    if (match(t,TokenType::id)) {
         advance();
     }
-    else if (match(read(),TokenType::inum)) {
+    else if (match(t,TokenType::inum)) {
         advance();
     }
-    else if (match(read(),TokenType::fnum)) {
+    else if (match(t,TokenType::fnum)) {
         advance();
     }
     else {

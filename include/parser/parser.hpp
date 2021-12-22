@@ -17,7 +17,6 @@ private:
 
 private: // Generic parser methods
     auto read()->Token;
-    auto peek()->Token;
     bool match(const Token&, TokenType);
     bool multi_match(const Token&, const std::vector<TokenType>&);
     void advance();
