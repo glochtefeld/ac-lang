@@ -77,7 +77,7 @@ AC::Token AC::Scanner::scan_digit() {
         advance();
     }
     if (read() != '.') 
-        t.type = TokenType::intdcl;
+        t.type = TokenType::inum;
     else {
         t.semantic_value += read();
         advance();
@@ -85,7 +85,7 @@ AC::Token AC::Scanner::scan_digit() {
             t.semantic_value += read();
             advance();
         }
-        t.type = TokenType::floatdcl;
+        t.type = TokenType::fnum;
     }
     return t;
 }

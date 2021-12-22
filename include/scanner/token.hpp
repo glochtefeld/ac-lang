@@ -42,6 +42,8 @@ inline std::string type_print(TokenType t) {
         return "blank";
     case TokenType::eof:
         return "eof";
+    default:
+        return "";
     }
 }
 
@@ -52,8 +54,8 @@ struct Token {
     Token(TokenType t, std::string s) : type(t), semantic_value(s) {}
 };
 
-inline std::ostream& operator <<(std::ostream& out, const Token& t) {
-    return out << "Token: type=" << type_print(t.type) << ", semantic value="<< t.semantic_value;
+inline auto operator<<(std::ostream& out, const Token& t)-> std::ostream& {
+    return out << "Token(type="  << type_print(t.type) << ",val=" << t.semantic_value;
 }
-}   
+}
 #endif
