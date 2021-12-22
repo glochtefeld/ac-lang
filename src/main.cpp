@@ -7,18 +7,28 @@
 
 
 int main(int argc, char** argv) {
-    if (argc != 2) {
-        std::cout << "Usage: ac FILE" <<std::endl;
+    if (argc < 2) {
+        std::cout << "Usage: ac (COMMAND | FILE)\n"
+            << "COMMAND:\n" << "\t-c PROGRAM\n\t\tCommand mode: run a one line program read from stdin.\n"
+            << "FILE:\n" << "\t Interpret the file at the provided path as a program." 
+            << std::endl;
         return EXIT_SUCCESS;
     }
-    std::ifstream file(argv[1],std::ifstream::in);
-    if (!file.is_open()) {
-        std::cout << "ERROR: file " << argv[1] << " not found";
-        return EXIT_FAILURE;
-    }
     std::stringstream program;
-    program << file.rdbuf();
-    file.close();
+
+    if (std::string(argv[1]) != "-c") {
+        std::ifstream file(argv[1],std::ifstream::in);
+        if (!file.is_open()) {
+            std::cout << "ERROR: file " << argv[1] << " not found" << std::endl;
+            return EXIT_FAILURE;
+        }
+        std::stringstream program;
+        program << file.rdbuf();
+        file.close();
+    }
+    else 
+        program << argv[2];
+
     std::cout << program.str() << std::endl;
 
     AC::Scanner s;
@@ -34,6 +44,8 @@ int main(int argc, char** argv) {
         std::cout << "Checking Program... ";
         if (p.check_program())
             std::cout << "Program compiles." << std::endl;
+        else
+            std::cout << "Program failed compilation." << std::endl;
     }
     catch (std::runtime_error& e) {
         std::cout << e.what() << std::endl;
