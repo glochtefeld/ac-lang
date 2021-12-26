@@ -1,5 +1,5 @@
 #include "parser/parser.hpp"
-#include "../external/catch2/catch.hpp"
+#include "../external/catch2/include/catch.hpp"
 
 SCENARIO ( "The parser is given appropriate input" ) {
     GIVEN ( "A parser" ) {

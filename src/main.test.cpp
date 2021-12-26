@@ -1,3 +1,3 @@
 #define CATCH_CONFIG_MAIN
-#include "../external/catch2/catch.hpp"
+#include "../external/catch2/include/catch.hpp"
 

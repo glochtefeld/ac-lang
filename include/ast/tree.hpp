@@ -6,7 +6,7 @@ namespace AC {
 
 class Tree {
 private:
-    std::vector<Node> nodes{};
+    //std::vector<Node> nodes{};
 
 public:
     Tree() = default;

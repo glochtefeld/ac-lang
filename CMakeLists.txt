@@ -2,8 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(AddingCalc VERSION 0.1.0 LANGUAGES C CXX)
 
 # EXTERNAL LIBS
-add_library(Catch2 INTERFACE)
-target_include_directories(Catch2 INTERFACE external)
+add_subdirectory(external)
 
 # IN-PROJECT LIBS
 add_library(scanner
