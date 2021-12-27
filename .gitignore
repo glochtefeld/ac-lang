@@ -1,2 +1,3 @@
 build/
 external/spdlog/build/
+external/Catch2/build/
