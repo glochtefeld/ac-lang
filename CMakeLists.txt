@@ -33,6 +33,6 @@ add_executable(ac-tests
     src/scanner/scanner.test.cpp
     src/main.test.cpp
 )
-target_link_libraries(ac-tests Catch2::Catch2)
+target_link_libraries(ac-tests PRIVATE Catch2)
 target_link_libraries(ac-tests PRIVATE scanner)
 target_link_libraries(ac-tests PRIVATE parser)
