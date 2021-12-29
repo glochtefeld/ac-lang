@@ -1,5 +1,6 @@
 #ifndef AC_TOKEN
 #define AC_TOKEN
+#include "../external/magic_enum/include/magic_enum.hpp"
 #include <string>
 #include <iostream>
 

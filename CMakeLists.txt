@@ -3,6 +3,7 @@ project(AddingCalc VERSION 0.1.0 LANGUAGES C CXX)
 
 # EXTERNAL LIBS
 add_subdirectory(external)
+target_compile_features(magic_enum INTERFACE cxx_std_17)
 
 # IN-PROJECT LIBS
 add_library(scanner
@@ -10,7 +11,7 @@ add_library(scanner
     include/scanner/scanner.hpp
     include/scanner/token.hpp
 )
-target_compile_features(scanner PUBLIC cxx_std_17)
+target_link_libraries(scanner PUBLIC magic_enum)
 target_include_directories(scanner PUBLIC include)
 
 add_library(parser
